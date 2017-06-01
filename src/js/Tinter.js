@@ -592,7 +592,7 @@ const webAnsiLookup = {
 // ];
 
 /**
- * @module
+ * @module Tinter
  */
 const Tinter = {
 
@@ -699,6 +699,7 @@ const Tinter = {
      * @param {string|Array} colorBg - the name of the HTML background color.
      * @param {string} style - the name of the HTML text style.
      * @returns {string} - the colorized/styled text string.
+     * @static
      */
     style: function(text, color, colorBg, style) {
 
@@ -717,7 +718,7 @@ const Tinter = {
         }
     },
 
-    _nearest16(rgb) {
+    _nearest16: function(rgb) {
         let hasRed = false;
         let hasGreen = false;
         let hasBlue = false;
@@ -753,7 +754,7 @@ const Tinter = {
         return nearest;
     },
 
-    _degrade(text, color, colorBg, style) {
+    _degrade: function(text, color, colorBg, style) {
 
         let dColor = this._nearest16(color);
         let dColorBg = this._nearest16(colorBg);
