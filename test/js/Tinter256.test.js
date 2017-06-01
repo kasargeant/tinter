@@ -123,6 +123,9 @@ describe("Class: Tinter (Node/256-color [using CSS Named colors])", function() {
             expect(Tinter.whiteBg(DUMMY_STRING)).toBe(`[48;5;231m${DUMMY_STRING}[0m`);
         });
 
+        it("should degrade a truecolor to 256-color appropriately.", function() {
+            expect(Tinter.style(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[48;5;160m\x1b[38;5;190m${DUMMY_STRING}\x1b[0m`);
+        });
     });
 
 });
