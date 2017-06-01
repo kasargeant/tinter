@@ -1,6 +1,6 @@
 {
   "name": "tinter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A lean and fast console string colorizing module - supports CSS naming and up to 16M+ colors.",
   "keywords": [
     "javascript"

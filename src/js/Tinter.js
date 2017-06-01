@@ -44,8 +44,10 @@ if(process.env.TINTER_TEST === undefined) {
             config.scheme = "256";
             switch(process.env.TERM_PROGRAM) {
                 case "Apple_Terminal":
+                    config.scheme = "16M";
                     break;
                 case "iTerm.app":
+                    config.scheme = "16M";
                     break;
                 default:
                     // Programs like WS have no TERM_PROGRAM VALUE... assume 8/16-color only
@@ -700,13 +702,63 @@ const Tinter = {
      */
     style: function(text, color, colorBg, style) {
 
+        // First check for raw RGB truecolor code... if the console scheme
+        // supports this then no probs... but if not - we need to degrade appropriately.
+        if(color.constructor === Array && config.scheme !== "16M") {
+            return this._degrade(text, color, colorBg, style);
+        }
+
         if(config.scheme === "16") {
             return this._style16(text, color, colorBg, style);
         } else if(config.scheme === "256") {
             return this._style256(text, color, colorBg, style);
-        } else if(config.scheme === "truecolor") {
+        } else if(config.scheme === "16M") {
             return this._styleTruecolor(text, color, colorBg, style);
         }
+    },
+
+    _nearest16(rgb) {
+        let hasRed = false;
+        let hasGreen = false;
+        let hasBlue = false;
+        let [r, g, b] = rgb;
+        let nearest = null;
+        if(r >= 128) {
+            hasRed = true;
+        }
+        if(g >= 128) {
+            hasGreen = true;
+        }
+        if(b >= 128) {
+            hasBlue = true;
+        }
+        if(hasRed && hasGreen && hasBlue) {
+            nearest = "white";
+        } else if(hasRed && hasGreen && !hasBlue) {
+            nearest = "yellow";
+        } else if(hasRed && !hasGreen && hasBlue) {
+            nearest = "magenta";
+        } else if(hasRed && !hasGreen && !hasBlue) {
+            nearest = "red";
+        } else if(!hasRed && hasGreen && hasBlue) {
+            nearest = "cyan";
+        } else if(!hasRed && hasGreen && !hasBlue) {
+            nearest = "green";
+        } else if(!hasRed && !hasGreen && hasBlue) {
+            nearest = "blue";
+        } else if(!hasRed && !hasGreen && !hasBlue) {
+            nearest = "black";
+        }
+
+        return nearest;
+    },
+
+    _degrade(text, color, colorBg, style) {
+
+        let dColor = this._nearest16(color);
+        let dColorBg = this._nearest16(colorBg);
+
+        return this.style(text, dColor, dColorBg, style);
     }
 };
 
@@ -728,9 +780,6 @@ for(let idx = 0; idx < webColors.length; idx++) {
     }
 }
 /* jshint ignore:end */
-
-// console.log(Tinter.yellow("hi there!"));
-// console.log(Tinter.style("hi there!", "blue", "yellow", "italic"));
 
 // Exports
 module.exports = Tinter;
