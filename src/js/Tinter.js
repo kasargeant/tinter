@@ -22,8 +22,6 @@ const schemes = ["8", "16", "256", "16M"];
 //console.info(process.env);
 if(process.env.TINTER_TEST === undefined) {
 
-
-
     //"darwin", "freebsd", "linux", "sunos", "win32"
 
     // if(process.env.CLICOLOR === "1") {
@@ -705,16 +703,16 @@ const Tinter = {
 
         // First check for raw RGB truecolor code... if the console scheme
         // supports this then no probs... but if not - we need to degrade appropriately.
-        if(color.constructor === Array && config.scheme !== "16M") {
-            return this._degrade(text, color, colorBg, style);
-        }
-
-        if(config.scheme === "16") {
-            return this._style16(text, color, colorBg, style);
+        if(color.constructor === Array) {
+            if(config.scheme === "16M") {
+                return this._styleTruecolor(text, color, colorBg, style);
+            } else {
+                return this._degrade(text, color, colorBg, style);
+            }
         } else if(config.scheme === "256") {
             return this._style256(text, color, colorBg, style);
-        } else if(config.scheme === "16M") {
-            return this._styleTruecolor(text, color, colorBg, style);
+        } else {
+            return this._style16(text, color, colorBg, style);
         }
     },
 
@@ -760,6 +758,50 @@ const Tinter = {
         let dColorBg = this._nearest16(colorBg);
 
         return this.style(text, dColor, dColorBg, style);
+    },
+
+
+    /**
+     * Demonstrates named web color and style console support (256 colors).
+     * @returns {void}
+     */
+    demoWebColor: function() {
+        let text = `!"#$%&()*+'-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~`;
+        for(let style of styles) {
+            for(let b = 0; b < webColors.length; b++) {
+                let bg = webColors[b];
+                for(let f = 0; f < webColors.length; f++) {
+                    let fg = webColors[f];
+                    let test = this.style(text, fg, bg, style);
+                    console.log(test);
+                }
+            }
+        }
+    },
+
+    /**
+     * Demonstrates TrueColor console support.
+     * @returns {void}
+     */
+    demoTrueColor: function() {
+        let text = `!"#$%&()*+'-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~`;
+        const inc = 4;
+        for(let style of styles) {
+            for(let bgR = 0; bgR < 255; bgR += inc) {
+                for(let bgG = 0; bgG < 255; bgG += inc) {
+                    for(let bgB = 0; bgB < 255; bgB += inc) {
+                        for(let fgR = 0; fgR < 255; fgR += inc) {
+                            for(let fgG = 0; fgG < 255; fgG += inc) {
+                                for(let fgB = 0; fgB < 255; fgB += inc) {
+                                    let test = this._styleTruecolor(text, [fgR, fgG, fgB], [bgR, bgG, bgB], style);
+                                    console.log(test);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 };
 
