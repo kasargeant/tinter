@@ -1,5 +1,7 @@
 # Tinter
 
+![Tinter woodblock](/docs/img/woodblock_sharkhats.jpg "Attribution: https://www.flickr.com/photos/sharkhats/")
+
 Tinter doesn't modify JavaScript's built-in string - or any other nastiness!  Instead, it colorizes text by inserting invisible unicode markers to tell the console how to color the text it's working with.
 
 So Tinter's colored strings - are simply ordinary JavaScript strings... and will do anything an ordinary JavaScript string will do.
