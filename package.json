@@ -1,6 +1,6 @@
 {
   "name": "tinter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A lean and fast console string colorizing module - supports CSS naming and up to 16M+ colors.",
   "keywords": [
     "javascript"
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/kasargeant/tinter.git"
   },
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "directories": {
     "doc": "docs",
     "test": "test"
@@ -27,23 +27,13 @@
     "npm": "~3.10.10"
   },
   "scripts": {
-    "build": "warhorse build",
-    "clean": "warhorse clean",
-    "create": "warhorse create",
-    "distribute": "warhorse distribute",
-    "document": "warhorse document",
-    "init": "warhorse init",
-    "lint": "warhorse lint",
-    "pack": "warhorse pack",
-    "precompile": "warhorse precompile",
-    "test": "warhorse test",
-    "jest": "jest",
-    "jest-update": "jest --updateSnapshot"
+    "test": "jest",
+    "test-update": "jest --updateSnapshot"
   },
   "devDependencies": {
-    "minami": "^1.2.3",
     "jest": "^20.0.4",
-    "jest-html-reporter": "^0.1.0"
+    "jest-html-reporter": "^0.1.0",
+    "minami": "^1.2.3"
   },
   "jest-html-reporter": {
     "pageTitle": "Test Results",
