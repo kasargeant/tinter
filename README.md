@@ -1,4 +1,4 @@
-# Tinter
+# Tinter [![npm](https://img.shields.io/npm/v/tinter.svg)]() [![Build Status](https://travis-ci.org/kasargeant/tinter.svg?branch=master)](https://travis-ci.org/kasargeant/tinter)
 
 ![Tinter woodblock](/docs/img/woodblock_sharkhats.jpg "Attribution: https://www.flickr.com/photos/sharkhats/")
 
@@ -125,7 +125,11 @@ console.log(color.style("I'm using direct RGB values!!!", [255,255,128], [192, 0
 
 Tinter has been benchmarked on Node versions upwards of v6.10.  Running on a recent Apple laptop - results for simple coloration were:-
 
-    <-- TODO: ADD IMAGE -->
+    chalk - single foreground color x 1,909,640 ops/sec ±0.78% (89 runs sampled)
+    colors - single foreground color x 3,740,251 ops/sec ±1.33% (85 runs sampled)
+    colors (unsafe) - single foreground color x 5,656,336 ops/sec ±0.89% (88 runs sampled)
+    tinter - single foreground color x 17,613,603 ops/sec ±0.94% (88 runs sampled)
+    Fastest is tinter - single foreground color
 
 For composition:-
 
