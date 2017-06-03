@@ -58,75 +58,75 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
         });
 
         it("should be able mark a string as black", function() {
-            expect(Tinter.black(DUMMY_STRING)).toBe(`\x1b[30m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.black(DUMMY_STRING)).toBe(`\x1b[1m\x1b[30m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string as red", function() {
-            expect(Tinter.red(DUMMY_STRING)).toBe(`\x1b[31m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.red(DUMMY_STRING)).toBe(`\x1b[1m\x1b[91m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string as green", function() {
-            expect(Tinter.green(DUMMY_STRING)).toBe(`\x1b[32m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.green(DUMMY_STRING)).toBe(`\x1b[1m\x1b[32m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string as yellow", function() {
-            expect(Tinter.yellow(DUMMY_STRING)).toBe(`\x1b[33m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.yellow(DUMMY_STRING)).toBe(`\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string as blue", function() {
-            expect(Tinter.blue(DUMMY_STRING)).toBe(`\x1b[34m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.blue(DUMMY_STRING)).toBe(`\x1b[1m\x1b[94m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string as magenta", function() {
-            expect(Tinter.magenta(DUMMY_STRING)).toBe(`\x1b[35m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.magenta(DUMMY_STRING)).toBe(`\x1b[1m\x1b[95m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string as cyan", function() {
-            expect(Tinter.cyan(DUMMY_STRING)).toBe(`\x1b[36m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.cyan(DUMMY_STRING)).toBe(`\x1b[1m\x1b[96m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string as white", function() {
-            expect(Tinter.white(DUMMY_STRING)).toBe(`\x1b[37m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.white(DUMMY_STRING)).toBe(`\x1b[1m\x1b[97m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with a black background", function() {
-            expect(Tinter.blackBg(DUMMY_STRING)).toBe(`\x1b[40m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.blackBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[40m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with a red background", function() {
-            expect(Tinter.redBg(DUMMY_STRING)).toBe(`\x1b[41m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.redBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[101m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with a green background", function() {
-            expect(Tinter.greenBg(DUMMY_STRING)).toBe(`\x1b[42m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.greenBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[42m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with a yellow background", function() {
-            expect(Tinter.yellowBg(DUMMY_STRING)).toBe(`\x1b[43m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.yellowBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[103m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with a blue background", function() {
-            expect(Tinter.blueBg(DUMMY_STRING)).toBe(`\x1b[44m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.blueBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[104m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with a magenta background", function() {
-            expect(Tinter.magentaBg(DUMMY_STRING)).toBe(`\x1b[45m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.magentaBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[105m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with a cyan background", function() {
-            expect(Tinter.cyanBg(DUMMY_STRING)).toBe(`\x1b[46m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.cyanBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[106m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with a white background", function() {
-            expect(Tinter.whiteBg(DUMMY_STRING)).toBe(`\x1b[47m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.whiteBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[107m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should be able mark a string with overlapping characteristics", function() {
-            expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m[44m[33m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[104m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should degrade a truecolor to 16-color appropriately.", function() {
-            expect(Tinter.style(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m[41m[33m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.style(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[101m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
         });
     });
 
