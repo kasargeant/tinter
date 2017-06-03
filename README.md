@@ -11,9 +11,9 @@ So Tinter's colored strings - are simply ordinary JavaScript strings... and will
 * **Full 16M+ color support** across all capable consoles.
 * **Smart color-degrading** to seamlessly support 256 and 16-color consoles.
 * **A single and minimal API** - same coloration code for a windows WebStorm terminal as an Apple laptop console. 
-* Super-fast performance... 6x faster than *colors.js* and 10x faster than *chalk*!!!
-* Clean, vanilla JS implementation - safe by default.  A drop-in module that plays nicely with other code.
-* Supports both [CSS4 Named Colors](https://www.w3.org/TR/css-color-4/#named-colors) as well as standard ANSI naming. 
+* **Super-fast performance...** 6x faster than *colors.js* and 10x faster than *chalk*!!!
+* **256 standard named colors** for easy usage - both [CSS4 Named Colors](https://www.w3.org/TR/css-color-4/#named-colors) as well as standard ANSI. 
+* Clean, vanilla JS implementation - **safe by default**.  A drop-in module that plays nicely with other code.
 
 ## Install
 
@@ -66,6 +66,30 @@ console.log(streamed);
 console.log(color.style("I'm multi-styled!", "cornflowerblue", "orange", "italic"));
 ```
 
+#### Injecting Tinter directly into String.
+
+A lot of developers like the colors.js approach of directly extending the built-in string - to facilitate simpler, shorter coding.
+
+Although Tinter's default API uses a safe approach that doesn't extend built-ins like this... you can!... if you really want. ;)
+
+To do this just import the alternative version:
+
+```javascript
+const Tinter = require("tinter/inject");     // This will not load standard Tinter.
+                                            // but extend String instead.
+``` 
+And from now on you can use coloration directly on any string using the shortened notation:-
+
+```javascript
+let myString = "hi there";
+console.log(myString);
+console.log(myString.underline);
+console.log(myString.blue);
+console.log(myString.greenBg);
+console.log("->" + myString.red.yellowBg.underline + "<-");
+console.log(myString);
+``` 
+
 ### Named colors
 
 To make Tinter as easy to work with as possible - the MOST - standardised and generally accepted naming was selected.
@@ -77,6 +101,17 @@ console.log(color.rebeccapurple("Hi I'm CSS4's Rebecca Purple!"));
 console.log(color.DeepSkyBlue2("Hi I'm ANSI's DeepSkyBlue... 2!"));
 ```
 
+#### CSS4 Named Color Set
+
+![Tinter supports CSS4 Named Colors](/docs/img/tinter_css4_named_foreground_16M.png "Foreground colors")
+
+![Tinter supports CSS4 Named Colors](/docs/img/tinter_css4_named_background_16M.png "Foreground colors")
+
+#### ANSI Named Color Set
+
+![Tinter supports ANSI Named Colors](/docs/img/tinter_ansi256_foreground_apple.png "Foreground colors")
+
+![Tinter supports ANSI Named Colors](/docs/img/tinter_ansi256_background_apple.png "Foreground colors")
 
 #### RGB colors (...and using the 16M+ color palette)
     
@@ -86,3 +121,12 @@ If your console supports TrueColor then Tinter can give you access to it's full 
 console.log(color.style("I'm using direct RGB values!!!", [255,255,128], [192, 0, 55], "italic"));
 ```
 
+## Performance
+
+Tinter has been benchmarked on Node versions upwards of v6.10.  Running on a recent Apple laptop - results for simple coloration were:-
+
+    <-- TODO: ADD IMAGE -->
+
+For composition:-
+
+    <-- TODO: ADD IMAGE -->
