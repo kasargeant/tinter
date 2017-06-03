@@ -27,23 +27,13 @@
     "npm": "~3.10.10"
   },
   "scripts": {
-    "build": "warhorse build",
-    "clean": "warhorse clean",
-    "create": "warhorse create",
-    "distribute": "warhorse distribute",
-    "document": "warhorse document",
-    "init": "warhorse init",
-    "lint": "warhorse lint",
-    "pack": "warhorse pack",
-    "precompile": "warhorse precompile",
-    "test": "warhorse test",
-    "jest": "jest",
-    "jest-update": "jest --updateSnapshot"
+    "test": "jest",
+    "test-update": "jest --updateSnapshot"
   },
   "devDependencies": {
-    "minami": "^1.2.3",
     "jest": "^20.0.4",
-    "jest-html-reporter": "^0.1.0"
+    "jest-html-reporter": "^0.1.0",
+    "minami": "^1.2.3"
   },
   "jest-html-reporter": {
     "pageTitle": "Test Results",
