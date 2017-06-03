@@ -8,7 +8,7 @@
 
 
 "use strict";
-
+console.log(JSON.stringify(process.env, null, 2));
 
 // Imports... nothing.
 
@@ -39,7 +39,6 @@ if(process.env.TINTER_TEST === undefined) {
             config.scheme = "16";
             break;
         case "xterm-256color":
-            config.scheme = "256";
             switch(process.env.TERM_PROGRAM) {
                 case "Apple_Terminal":
                     config.scheme = "16M";
@@ -48,8 +47,12 @@ if(process.env.TINTER_TEST === undefined) {
                     config.scheme = "16M";
                     break;
                 default:
+                    if(process.env.FORCE_COLOR === "true") {
+                        config.scheme = "16";
+                    } else {
+                        config.scheme = "256";
+                    }
                     // Programs like WS have no TERM_PROGRAM VALUE... assume 8/16-color only
-                    config.scheme = "16";
             }
             break;
     }
@@ -618,7 +621,7 @@ const Tinter = {
         if(color !== undefined) {
             let i = webAnsiLookup[color];
             if(i === undefined || i > 15) {
-                console.error(`Error: Unrecognised text color: '${color}'.`);
+                console.error(`Error: Unrecognised foreground color: '${color}'.`);
                 return text;
             }
             result += `\x1b[${30 + i}m`;
@@ -645,6 +648,7 @@ const Tinter = {
                 console.error(`Error: Unrecognised background color: '${colorBg}'.`);
                 return text;
             }
+            if(i === 0) {i = 16;}
             result += `\x1b[48;5;${i}m`;
 
         }
@@ -654,6 +658,7 @@ const Tinter = {
                 console.error(`Error: Unrecognised text color: '${color}'.`);
                 return text;
             }
+            if(i === 0) {i = 16;}
             result += `\x1b[38;5;${i}m`;
 
         }
@@ -709,10 +714,10 @@ const Tinter = {
             } else {
                 return this._degrade(text, color, colorBg, style);
             }
-        } else if(config.scheme === "256") {
-            return this._style256(text, color, colorBg, style);
-        } else {
+        } else if(config.scheme === "16") {
             return this._style16(text, color, colorBg, style);
+        } else {
+            return this._style256(text, color, colorBg, style);
         }
     },
 
@@ -765,18 +770,28 @@ const Tinter = {
      * Demonstrates named web color and style console support (256 colors).
      * @returns {void}
      */
+    // demoWebColor: function() {
+    //     for(let style of styles) {
+    //         for(let b = 0; b < webColors.length; b++) {
+    //             let bg = webColors[b];
+    //             for(let f = 0; f < webColors.length; f++) {
+    //                 let fg = webColors[f];
+    //                 let text = `${bg}/${fg}`;
+    //                 let test = this.style(text, fg, bg, style);
+    //                 console.log(test);
+    //             }
+    //         }
+    //     }
+    // },
     demoWebColor: function() {
-        let text = `!"#$%&()*+'-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~`;
-        for(let style of styles) {
-            for(let b = 0; b < webColors.length; b++) {
-                let bg = webColors[b];
-                for(let f = 0; f < webColors.length; f++) {
-                    let fg = webColors[f];
-                    let test = this.style(text, fg, bg, style);
-                    console.log(test);
-                }
-            }
+        let bg = "black";
+        for(let f = 0; f < webColors.length; f++) {
+            let fg = webColors[f];
+            let text = `${bg}/${fg}`;
+            let test = this.style(text, fg, bg, "plain");
+            console.log(test);
         }
+
     },
 
     /**
@@ -804,6 +819,7 @@ const Tinter = {
         }
     }
 };
+console.log("USING SCHEME: " + config.scheme);
 
 /* jshint ignore:start */
 for(let idx = 0; idx < styles.length; idx++) {
@@ -826,3 +842,6 @@ for(let idx = 0; idx < webColors.length; idx++) {
 
 // Exports
 module.exports = Tinter;
+
+
+Tinter.demoWebColor();
