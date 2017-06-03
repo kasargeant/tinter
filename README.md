@@ -10,7 +10,8 @@ Ok to start coloring - we just import it at the top of the script with whatever 
 
 ```javascript
 const Tinter = require("tinter");   // 'Pure'...
-const color = require("tinter");    // Or 'pragmatic'... ;)
+const Tint = require("tinter");     // Or 'pragmatic'...
+const color = require("tinter");    // Or 'compatible' as a drop-in :)
 ```                         
 
 Single style or color:-
@@ -43,5 +44,5 @@ TrueColor support.
 If your console supports TrueColor then Tinter can give you access to it's full 16M+ RGB color palette.
 
 ```javascript
-console.log(color.style("I'm multi-styled!", [255,255,128], [192, 0, 55], "italic"));
+console.log(color.style("I'm using direct RGB values!!!", [255,255,128], [192, 0, 55], "italic"));
 ```
