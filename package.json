@@ -1,6 +1,6 @@
 {
   "name": "tinter",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A lean and fast console string colorizing module - supports CSS naming and up to 16M+ colors.",
   "keywords": [
     "javascript"
@@ -12,7 +12,7 @@
     "type": "git",
     "url": "https://github.com/kasargeant/tinter.git"
   },
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "directories": {
     "doc": "docs",
     "test": "test"
