@@ -468,7 +468,7 @@ const colors = [
     ["whitesmoke",[245,245,245],255,97]
 ];
 
-const styles = ["reset", "bright", "dim", "italic", "underline", "blink", "plain", "inverse", "hidden"];
+const styles = ["reset", "bright", "dim", "italic", "underline", "blink", "blink2", "inverse", "hidden"];
 
 /**
  * @module Tinter
@@ -513,8 +513,7 @@ const Tinter = {
      * @returns {string} - the colorized/styled text string.
      * @static
      */
-    style: function(text, color, colorBg, style) {
-
+    style: function(text, color="default", colorBg="default", style="reset") {
         // First check for raw RGB truecolor code... if the console scheme
         // supports this then no probs... but if not - we need to degrade appropriately.
         if(color.constructor === Array) {
@@ -524,7 +523,7 @@ const Tinter = {
                 return this._degrade(text, color, colorBg, style);
             }
         } else {
-            return this[style]() + this[colorBg+"Bg"]() + this[color]() + text + "\x1b[0m";
+            return this[style]() + this[colorBg + "Bg"]() + this[color]() + text + "\x1b[0m";
         }
     },
 
@@ -689,6 +688,8 @@ for(let idx = 0; idx < colors.length; idx++) {
     } else {
         console.error(`Error: Unknown color scheme '${config.scheme}'.`);
     }
+    Tinter.default = function() {return `\x1b[39m`;};
+    Tinter.defaultBg = function() {return `\x1b[49m`;};
 }
 /* jshint ignore:end */
 
