@@ -468,7 +468,7 @@ const colors = [
     ["whitesmoke",[245,245,245],255,97]
 ];
 
-const styles = ["reset", "bright", "dim", "italic", "underline", "blink", "plain", "inverse", "hidden"];
+const styles = ["reset", "bright", "dim", "italic", "underline", "blink", "blink2", "inverse", "hidden"];
 
 /**
  * @module Tinter
@@ -513,8 +513,7 @@ const Tinter = {
      * @returns {string} - the colorized/styled text string.
      * @static
      */
-    style: function(text, color, colorBg, style) {
-
+    style: function(text, color="default", colorBg="default", style="reset") {
         // First check for raw RGB truecolor code... if the console scheme
         // supports this then no probs... but if not - we need to degrade appropriately.
         if(color.constructor === Array) {
@@ -524,7 +523,15 @@ const Tinter = {
                 return this._degrade(text, color, colorBg, style);
             }
         } else {
-            return this[style]() + this[colorBg+"Bg"]() + this[color]() + text + "\x1b[0m";
+            return this[style]() + this[colorBg + "Bg"]() + this[color]() + text + "\x1b[0m";
+            // try {
+            //     return this[style]() + this[colorBg + "Bg"]() + this[color]() + text + "\x1b[0m";
+            // } catch(ex) {
+            //     console.log("style: " + style);
+            //     console.log("colorBg: " + colorBg);
+            //     console.log("color: " + color);
+            //     return text;
+            // }
         }
     },
 
@@ -577,28 +584,12 @@ const Tinter = {
      * Demonstrates named web color and style console support (256 colors).
      * @returns {void}
      */
-    // demoWebColor: function() {
-    //     for(let style of styles) {
-    //         for(let b = 0; b < webColors.length; b++) {
-    //             let bg = webColors[b];
-    //             for(let f = 0; f < webColors.length; f++) {
-    //                 let fg = webColors[f];
-    //                 let text = `${bg}/${fg}`;
-    //                 let test = this.style(text, fg, bg, style);
-    //                 console.log(test);
-    //             }
-    //         }
-    //     }
-    // },
     demoWebColor: function() {
-        let bg = "black";
-        for(let f = 0; f < webColors.length; f++) {
-            let fg = webColors[f];
-            let text = `${bg}/${fg}`;
-            let test = this.style(text, fg, bg, "plain");
+        for(let f = 0; f < colors.length; f++) {
+            let fg = colors[f][0];
+            let test = this[fg](fg);
             console.log(test);
         }
-
     },
 
     /**
@@ -608,25 +599,17 @@ const Tinter = {
     demoTrueColor: function() {
         let text = `!"#$%&()*+'-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~`;
         const inc = 4;
-        for(let style of styles) {
-            for(let bgR = 0; bgR < 255; bgR += inc) {
-                for(let bgG = 0; bgG < 255; bgG += inc) {
-                    for(let bgB = 0; bgB < 255; bgB += inc) {
-                        for(let fgR = 0; fgR < 255; fgR += inc) {
-                            for(let fgG = 0; fgG < 255; fgG += inc) {
-                                for(let fgB = 0; fgB < 255; fgB += inc) {
-                                    let test = this._styleTruecolor(text, [fgR, fgG, fgB], [bgR, bgG, bgB], style);
-                                    console.log(test);
-                                }
-                            }
-                        }
-                    }
+        for(let fgR = 0; fgR < 255; fgR += inc) {
+            for(let fgG = 0; fgG < 255; fgG += inc) {
+                let text = "";
+                for(let fgB = 0; fgB < 255; fgB += inc) {
+                    let rgb = [fgR, fgG, fgB];
+                    text += this._styleTruecolor("#", rgb);
                 }
+                console.log(text);
             }
         }
-    },
-    reset: function() {
-        return `\x1b[0m`;
+
     }
 };
 ////console.log("USING SCHEME: " + config.scheme); // DEBUG ONLY
@@ -689,6 +672,9 @@ for(let idx = 0; idx < colors.length; idx++) {
     } else {
         console.error(`Error: Unknown color scheme '${config.scheme}'.`);
     }
+    Tinter.default = function() {return `\x1b[39m`;};
+    Tinter.defaultBg = function() {return `\x1b[49m`;};
+    Tinter.plain = Tinter.reset;
 }
 /* jshint ignore:end */
 
