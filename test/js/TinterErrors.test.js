@@ -26,15 +26,98 @@ describe("Class: Tinter (Node/unknown environ)", function() {
         });
     });
 
-    describe("Errors", function() {
+    describe("_styleTruecolor() errors", function() {
 
-        // it("should recognise a generic 16-col env e.g. GIT windows console", function() {
-        //     expect(Tinter.hi).toThrowError("");
+        // Bad types
+        it("should throw an error with a style of the wrong type", function() {
+            // expect(function() {Tinter._styleTruecolor("anything", [255,255,127], [192, 0, 55], "REALLYWRONG")}).toThrowError(new Error(`Unrecognised text style: 'REALLYWRONG'.`));
+            expect(function() {
+                Tinter._styleTruecolor("anything", [255, 255, 127], [192, 0, 55], "REALLYWRONG");
+            }).toThrow();
+        });
+
+        it("should throw an error with a background color of the wrong type", function() {
+            expect(function() {
+                Tinter._styleTruecolor("anything", [255, 255, 127], "red", "underline");
+            }).toThrow();
+        });
+
+        it("should throw an error with a foreground color of the wrong type", function() {
+            expect(function() {
+                Tinter._styleTruecolor("anything", "green", [192, 0, 55], "underline");
+            }).toThrow();
+        });
+
+        // Malformed arrays
+        it("should throw an error with a malformed background color array", function() {
+            expect(function() {
+                Tinter._styleTruecolor("anything", [255, 255, 127], [192, 0], "underline");
+            }).toThrow();
+        });
+
+        it("should throw an error with a malformed foreground color array", function() {
+            expect(function() {
+                Tinter._styleTruecolor("anything", [255, 127], [192, 0, 55], "underline");
+            }).toThrow();
+        });
+    });
+
+    describe("rgb() errors", function() {
+
+        // it("should throw an error with a malformed style", function() {
+        //     expect(function() {Tinter.rgb("anything", [255,255,255], [0,0,0], style="reset");}).toThrow();
         // });
+        // Bad types
+        it("should throw an error with a style of the wrong type", function() {
+            // expect(function() {Tinter._styleTruecolor("anything", [255,255,127], [192, 0, 55], "REALLYWRONG")}).toThrowError(new Error(`Unrecognised text style: 'REALLYWRONG'.`));
+            expect(function() {
+                Tinter.rgb("anything", [255, 255, 127], [192, 0, 55], "REALLYWRONG");
+            }).toThrow();
+        });
 
+        it("should throw an error with a background color of the wrong type", function() {
+            expect(function() {
+                Tinter.rgb("anything", [255, 255, 127], "red", "underline");
+            }).toThrow();
+        });
+
+        it("should throw an error with a foreground color of the wrong type", function() {
+            expect(function() {
+                Tinter.rgb("anything", "green", [192, 0, 55], "underline");
+            }).toThrow();
+        });
+
+        // Malformed arrays
+        it("should throw an error with a malformed background color array", function() {
+            expect(function() {
+                Tinter.rgb("anything", [255, 255, 127], [192, 0], "underline");
+            }).toThrow();
+        });
+
+        it("should throw an error with a malformed foreground color array", function() {
+            expect(function() {
+                Tinter.rgb("anything", [255, 127], [192, 0, 55], "underline");
+            }).toThrow();
+        });
 
     });
 
-
+    //
+    // describe("Building errors", function() {
+    //
+    //     it("should throw an error with a background color of the wrong type", function() {
+    //
+    //         process.env.TINTER_TEST = "NONEXISTANT";
+    //         try {
+    //             let newTinter = require("tinter");
+    //         } catch(ex) {
+    //             expect(ex).toBe(new Error(`Unknown color scheme 'NONEXISTANT'.`));
+    //         }
+    //
+    //
+    //     });
+    //
+    //
+    // });
 });
 
