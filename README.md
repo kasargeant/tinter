@@ -11,7 +11,7 @@ So Tinter's colored strings - are simply ordinary JavaScript strings... and will
 * **Full 16M+ color support** across all capable consoles.
 * **Smart color-degrading** to seamlessly support 256 and 16-color consoles.
 * **A single and minimal API** - same coloration code for a windows WebStorm terminal as an Apple laptop console. 
-* **Super-fast performance...** 6x faster than *colors.js* and 10x faster than *chalk*!!!
+* **Super-fast performance...** 5x faster than *colors.js* and 10x faster than *chalk*!!!
 * **256 standard named colors** for easy usage - both [CSS4 Named Colors](https://www.w3.org/TR/css-color-4/#named-colors) as well as standard ANSI. 
 * Clean, vanilla JS implementation - **safe by default**.  A drop-in module that plays nicely with other code.
 
@@ -122,6 +122,8 @@ console.log(myString);
 
 ## Performance
 
+### General usage
+
 Tinter has been benchmarked on Node versions upwards of v6.10.  Running on a recent Apple laptop - results for simple coloration were:-
 
     chalk           - single color x  1,909,640 ops/sec ±0.78% (89 runs sampled)
@@ -134,14 +136,25 @@ For composition:-
 
     <-- TODO: ADD IMAGE -->
 
-Also, although it offers a slightly shorter syntax - and directly extends string's prototype - the unsafe version of 'colors' doesn't perform much better than the safe version.
+### Unsafe (build-in extending versions)
 
-Tinter offers an unsafe equivalent too - but only for compatibility reasons.  We don't recommend either!  But suggest only using this - if you wish to upgrade to Tinter but have the burden of large amounts of legacy 'colors' code or something like that.  Anyway, just for completeness, benchmarks for the unsafe versions are:-
+Colors.js also offers an unsafe version of its library with a shorter syntax and better performance.  
+
+What makes it 'unsafe' is the fact that it directly extends the built-in string prototype and that can cause problems with other modules' usage of strings.
+
+Tinter offers an unsafe equivalent too - but only for code compatibility reasons.  We strongly recommend against you using either unsafe library!  
+
+However, if you wish to upgrade your codebase to use Tinter but unfortunately have large amounts of legacy 'colors' code that's currently impractical to rewrite - Tinter/Inject's your solution.  
+
+Anyway, just for completeness and to demonstrate the poor performance of this approach... benchmarks for the unsafe versions are:-
 
     colors (unsafe)    - single color x  5,679,025 ops/sec ±1.35% (87 runs sampled)
     tinter (unsafe)    - single color x  5,825,590 ops/sec ±0.78% (87 runs sampled)
 
   
-Finally, to summarize, it seems clear that both in terms of it's range of usable colors and in terms of sheer string-crunching performance - Tinter rocks!
+Finally, to summarize, it seems clear that both in terms of its range of usable colors and in terms of sheer string-crunching performance - Tinter rocks!
 
 We hope you will like it too!
+
+## License
+

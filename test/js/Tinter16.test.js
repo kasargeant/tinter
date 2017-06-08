@@ -27,7 +27,15 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
         });
     });
 
-    describe("Colorization functions", function() {
+    describe("Style functions", function() {
+
+        it("should be able mark a string as reset", function() {
+            expect(Tinter.reset(DUMMY_STRING)).toBe(`\x1b[0m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should be able mark a string as plain", function() {
+            expect(Tinter.plain(DUMMY_STRING)).toBe(`\x1b[0m${DUMMY_STRING}\x1b[0m`);
+        });
 
         it("should be able mark a string as bright", function() {
             expect(Tinter.bright(DUMMY_STRING)).toBe(`\x1b[1m${DUMMY_STRING}\x1b[0m`);
@@ -56,6 +64,10 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
         it("should be able mark a string as hidden", function() {
             expect(Tinter.hidden(DUMMY_STRING)).toBe(`\x1b[8m${DUMMY_STRING}\x1b[0m`);
         });
+
+    });
+
+    describe("Colorization functions (foreground)", function() {
 
         it("should be able mark a string as black", function() {
             expect(Tinter.black(DUMMY_STRING)).toBe(`\x1b[1m\x1b[30m${DUMMY_STRING}\x1b[0m`);
@@ -89,6 +101,13 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
             expect(Tinter.white(DUMMY_STRING)).toBe(`\x1b[1m\x1b[97m${DUMMY_STRING}\x1b[0m`);
         });
 
+        it("should be able mark a string with as default", function() {
+            expect(Tinter.default(DUMMY_STRING)).toBe(`\x1b[39m${DUMMY_STRING}`);
+        });
+    });
+
+    describe("Colorization functions (background)", function() {
+
         it("should be able mark a string with a black background", function() {
             expect(Tinter.blackBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[40m${DUMMY_STRING}\x1b[0m`);
         });
@@ -121,6 +140,14 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
             expect(Tinter.whiteBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[107m${DUMMY_STRING}\x1b[0m`);
         });
 
+        it("should be able mark a string with a default background", function() {
+            expect(Tinter.defaultBg(DUMMY_STRING)).toBe(`\x1b[49m${DUMMY_STRING}`);
+        });
+
+    });
+
+    describe("Colorization functions (composite)", function() {
+
         it("should be able mark a string with overlapping characteristics", function() {
             expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[104m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
         });
@@ -142,6 +169,10 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
     describe("Color degrading functions", function() {
 
         it("should degrade a truecolor RGB value to the correct named color - red.", function() {
+            expect(Tinter._nearest16([10, 127, 0])).toBe("black");
+        });
+
+        it("should degrade a truecolor RGB value to the correct named color - red.", function() {
             expect(Tinter._nearest16([200, 10, 21])).toBe("red");
         });
 
@@ -153,14 +184,62 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
             expect(Tinter._nearest16([2, 0, 200])).toBe("blue");
         });
 
-        it("should degrade a truecolor RGB value to the correct named color - random.", function() {
-            expect(Tinter._nearest16([10, 127, 200])).toBe("blue");
+        it("should degrade a truecolor RGB value to the correct named color - yellow.", function() {
+            expect(Tinter._nearest16([200, 128, 0])).toBe("yellow");
         });
 
-        //
+        it("should degrade a truecolor RGB value to the correct named color - magenta.", function() {
+            expect(Tinter._nearest16([200, 10, 128])).toBe("magenta");
+        });
+
+        it("should degrade a truecolor RGB value to the correct named color - cyan.", function() {
+            expect(Tinter._nearest16([0, 200, 128])).toBe("cyan");
+        });
+
+        it("should degrade a truecolor RGB value to the correct named color - white.", function() {
+            expect(Tinter._nearest16([175, 200, 128])).toBe("white");
+        });
 
         it("should degrade a set of truecolor RGB values correctly", function() {
             expect(Tinter._degrade(DUMMY_STRING, [200, 10, 21], [2, 0, 200], "italic")).toBe(`\x1b[3m\x1b[1m\x1b[104m\x1b[1m\x1b[91m${DUMMY_STRING}\x1b[0m`);
+        });
+
+    });
+
+    describe("Truecolor functions (in 16-col environment)", function() {
+
+        // private method
+        it("should (privately) represent truecolor RGB values correctly - regardless of environment", function() {
+            expect(Tinter._styleTruecolor(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[48;2;192;0;55m\x1b[1m\x1b[38;2;255;255;127m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should (privately) represent truecolor RGB values correctly - regardless of environment when using defaults (3 params)", function() {
+            expect(Tinter._styleTruecolor(DUMMY_STRING, [255,255,127], [192, 0, 55])).toBe(`\x1b[1m\x1b[48;2;192;0;55m\x1b[1m\x1b[38;2;255;255;127m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should (privately) represent truecolor RGB values correctly - regardless of environment when using defaults (3 params)", function() {
+            expect(Tinter._styleTruecolor(DUMMY_STRING, [255,255,127])).toBe(`\x1b[1m\x1b[38;2;255;255;127m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should (privately) represent truecolor RGB values correctly - regardless of environment when using defaults (3 params)", function() {
+            expect(Tinter._styleTruecolor(DUMMY_STRING)).toBe(`${DUMMY_STRING}\x1b[0m`);
+        });
+
+        // public method
+        it("should degrade truecolor RGB values correctly - according to environment", function() {
+            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[101m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should degrade truecolor RGB values correctly - according to environment when using defaults (3 params)", function() {
+            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55])).toBe(`\x1b[0m\x1b[1m\x1b[101m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should degrade truecolor RGB values correctly - according to environment when using defaults (3 params)", function() {
+            expect(Tinter.rgb(DUMMY_STRING, [255,255,127])).toBe(`\x1b[0m\x1b[1m\x1b[40m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should degrade truecolor RGB values correctly - according to environment when using defaults (3 params)", function() {
+            expect(Tinter.rgb(DUMMY_STRING)).toBe(`\x1b[0m\x1b[1m\x1b[40m\x1b[1m\x1b[97m${DUMMY_STRING}\x1b[0m`);
         });
     });
 

@@ -645,8 +645,8 @@ for(let idx = 0; idx < colors.length; idx++) {
     } else {
         console.error(`Error: Unknown color scheme '${config.scheme}'.`);
     }
-    Tinter.default = function() {return `\x1b[39m`;};
-    Tinter.defaultBg = function() {return `\x1b[49m`;};
+    Tinter.default = function(text) {return `\x1b[39m${text}`;};
+    Tinter.defaultBg = function(text) {return `\x1b[49m${text}`;};
     Tinter.plain = Tinter.reset;
 }
 /* jshint ignore:end */
