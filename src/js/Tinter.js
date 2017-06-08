@@ -487,25 +487,23 @@ const Tinter = {
         if(style !== undefined) {
             let i = styles.indexOf(style);
             if(i === -1) {
-                console.error(`Error: Unrecognised text style: '${style}'.`);
-                return text;
+                throw new Error(`Unrecognised text style: '${style}'.`);
             }
             result += `\x1b[${i}m`;
         }
-        if(colorBg !== undefined && colorBg.constructor === Array) {
-            if(colorBg.length !== 3) {
-                console.error(`Error: Unrecognised background color: '${colorBg}'.`);
-                return text;
+        if(colorBg !== undefined) {
+            if(colorBg.constructor === Array && colorBg.length === 3) {
+                result += `\x1b[1m\x1b[48;2;${colorBg[0]};${colorBg[1]};${colorBg[2]}m`;
+            } else {
+                throw new Error(`Error: RGB background color value is malformed or not an array: '${colorBg}'.`);
             }
-            result += `\x1b[1m\x1b[48;2;${colorBg[0]};${colorBg[1]};${colorBg[2]}m`;
-
         }
-        if(color !== undefined && color.constructor === Array) {
-            if(color.length !== 3) {
-                console.error(`Error: Unrecognised text color: '${color}'.`);
-                return text;
+        if(color !== undefined) {
+            if(color.constructor === Array && color.length === 3) {
+                result += `\x1b[1m\x1b[38;2;${color[0]};${color[1]};${color[2]}m`;
+            } else {
+                throw new Error(`Error: RGB text color value is malformed or not an array: '${color}'.`);
             }
-            result += `\x1b[1m\x1b[38;2;${color[0]};${color[1]};${color[2]}m`;
         }
         return result += `${text}\x1b[0m`;
     },
@@ -542,12 +540,14 @@ const Tinter = {
                 return this._degrade(text, color, colorBg, style);
             }
         } else {
-            console.error("Error: Unrecognized RGB array values or ANSI style.");
-            return text;
+            throw new Error("Unrecognized or malformed RGB array values.");
         }
     },
 
     _nearest16: function(rgb) {
+        if(rgb.constructor !== Array || rgb.length !== 3) {
+            throw new Error("Malformed array value.");
+        }
         let hasRed = false;
         let hasGreen = false;
         let hasBlue = false;
@@ -649,7 +649,7 @@ for(let idx = 0; idx < colors.length; idx++) {
             return `\x1b[1m\x1b[48;2;${r};${g};${b}m${text}\x1b[0m`;
         };
     } else {
-        console.error(`Error: Unknown color scheme '${config.scheme}'.`);
+        throw new Error(`Unknown color scheme '${config.scheme}'.`);
     }
     Tinter.default = function(text) {return `\x1b[39m${text}`;};
     Tinter.defaultBg = function(text) {return `\x1b[49m${text}`;};

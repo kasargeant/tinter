@@ -37,6 +37,27 @@ describe("Class: Tinter (Node/unknown environ)", function() {
                 debug: false
             });
         });
+
+        it("should recognise a generic 16-col env e.g. GIT windows console", function() {
+            expect(Tinter._setEnv({
+                TERM: "xterm-color"
+            })).toMatchObject({
+                scheme: "16",
+                isBrowser: false,
+                debug: false
+            });
+        });
+
+        it("should recognise a generic 16-col env e.g. GIT windows console", function() {
+            expect(Tinter._setEnv({
+                TERM: "xterm-16color"
+            })).toMatchObject({
+                scheme: "16",
+                isBrowser: false,
+                debug: false
+            });
+        });
+
         it("should recognise a generic 256-col env e.g. GIT windows console", function() {
             expect(Tinter._setEnv({
                 TERM: "xterm-256color"
