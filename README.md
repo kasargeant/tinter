@@ -1,4 +1,4 @@
-# Tinter [![npm](https://img.shields.io/npm/v/tinter.svg)]() [![Build Status](https://travis-ci.org/kasargeant/tinter.svg?branch=master)](https://travis-ci.org/kasargeant/tinter)
+# Tinter [![npm](https://img.shields.io/npm/v/tinter.svg)]() [![Build Status](https://travis-ci.org/kasargeant/tinter.svg?branch=master)](https://travis-ci.org/kasargeant/tinter)  [![Coverage Status](https://coveralls.io/repos/github/kasargeant/tinter/badge.svg?branch=master)](https://coveralls.io/github/kasargeant/tinter?branch=master)
 
 ![Tinter woodblock](/docs/img/woodblock_sharkhats.jpg "Attribution: https://www.flickr.com/photos/sharkhats/")
 
@@ -18,9 +18,7 @@ So Tinter's colored strings - are simply ordinary JavaScript strings... and will
 
 ### Named colors
 
-To make Tinter as easy to work with as possible - the MOST - standardised and generally accepted naming was selected.
-
-Thus Tinter specificially supports both the new **lowercased** [CSS4 Named Colors](https://www.w3.org/TR/css-color-4/#named-colors) as well as the standard and older **camel-cased** ANSI color naming schemes. 
+Tinter supports both the new **lowercased** [CSS4 Named Colors](https://www.w3.org/TR/css-color-4/#named-colors) as well as the standard and older **camel-cased** ANSI color naming schemes. 
 
 ```javascript
 console.log(color.rebeccapurple("Hi I'm CSS4's Rebecca Purple!"));
