@@ -1,6 +1,6 @@
 {
   "name": "tinter",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A lean and fast console string colorizing module - supports CSS naming and up to 16M+ colors.",
   "keywords": [
     "javascript"
@@ -32,6 +32,7 @@
     "test-update": "jest --updateSnapshot"
   },
   "devDependencies": {
+    "coveralls": "^2.13.1",
     "jest": "^20.0.4",
     "jest-html-reporter": "^0.1.0",
     "minami": "^1.2.3"

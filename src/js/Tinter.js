@@ -491,7 +491,7 @@ const Tinter = {
                 console.error(`Error: Unrecognised background color: '${colorBg}'.`);
                 return text;
             }
-            result += `\x1b[48;2;${colorBg[0]};${colorBg[1]};${colorBg[2]}m`;
+            result += `\x1b[1m\x1b[48;2;${colorBg[0]};${colorBg[1]};${colorBg[2]}m`;
 
         }
         if(color !== undefined && color.constructor === Array) {
@@ -499,7 +499,7 @@ const Tinter = {
                 console.error(`Error: Unrecognised text color: '${color}'.`);
                 return text;
             }
-            result += `\x1b[38;2;${color[0]};${color[1]};${color[2]}m`;
+            result += `\x1b[1m\x1b[38;2;${color[0]};${color[1]};${color[2]}m`;
         }
         return result += `${text}\x1b[0m`;
     },
@@ -524,14 +524,6 @@ const Tinter = {
             }
         } else {
             return this[style]() + this[colorBg + "Bg"]() + this[color]() + text + "\x1b[0m";
-            // try {
-            //     return this[style]() + this[colorBg + "Bg"]() + this[color]() + text + "\x1b[0m";
-            // } catch(ex) {
-            //     console.log("style: " + style);
-            //     console.log("colorBg: " + colorBg);
-            //     console.log("color: " + color);
-            //     return text;
-            // }
         }
     },
 
@@ -577,39 +569,6 @@ const Tinter = {
         let dColorBg = this._nearest16(colorBg);
 
         return this.style(text, dColor, dColorBg, style);
-    },
-
-
-    /**
-     * Demonstrates named web color and style console support (256 colors).
-     * @returns {void}
-     */
-    demoWebColor: function() {
-        for(let f = 0; f < colors.length; f++) {
-            let fg = colors[f][0];
-            let test = this[fg](fg);
-            console.log(test);
-        }
-    },
-
-    /**
-     * Demonstrates TrueColor console support.
-     * @returns {void}
-     */
-    demoTrueColor: function() {
-        let text = `!"#$%&()*+'-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~`;
-        const inc = 4;
-        for(let fgR = 0; fgR < 255; fgR += inc) {
-            for(let fgG = 0; fgG < 255; fgG += inc) {
-                let text = "";
-                for(let fgB = 0; fgB < 255; fgB += inc) {
-                    let rgb = [fgR, fgG, fgB];
-                    text += this._styleTruecolor("#", rgb);
-                }
-                console.log(text);
-            }
-        }
-
     }
 };
 ////console.log("USING SCHEME: " + config.scheme); // DEBUG ONLY

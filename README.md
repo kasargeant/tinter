@@ -1,4 +1,4 @@
-# Tinter [![npm](https://img.shields.io/npm/v/tinter.svg)]() [![Build Status](https://travis-ci.org/kasargeant/tinter.svg?branch=master)](https://travis-ci.org/kasargeant/tinter)
+# Tinter [![npm](https://img.shields.io/npm/v/tinter.svg)]() [![Build Status](https://travis-ci.org/kasargeant/tinter.svg?branch=master)](https://travis-ci.org/kasargeant/tinter)  [![Coverage Status](https://coveralls.io/repos/github/kasargeant/tinter/badge.svg?branch=master)](https://coveralls.io/github/kasargeant/tinter?branch=master)
 
 ![Tinter woodblock](/docs/img/woodblock_sharkhats.jpg "Attribution: https://www.flickr.com/photos/sharkhats/")
 
@@ -14,6 +14,36 @@ So Tinter's colored strings - are simply ordinary JavaScript strings... and will
 * **Super-fast performance...** 6x faster than *colors.js* and 10x faster than *chalk*!!!
 * **256 standard named colors** for easy usage - both [CSS4 Named Colors](https://www.w3.org/TR/css-color-4/#named-colors) as well as standard ANSI. 
 * Clean, vanilla JS implementation - **safe by default**.  A drop-in module that plays nicely with other code.
+
+
+### Named colors
+
+Tinter supports both the new **lowercased** [CSS4 Named Colors](https://www.w3.org/TR/css-color-4/#named-colors) as well as the standard and older **camel-cased** ANSI color naming schemes. 
+
+```javascript
+console.log(color.rebeccapurple("Hi I'm CSS4's Rebecca Purple!"));
+console.log(color.DeepSkyBlue2("Hi I'm ANSI's DeepSkyBlue... 2!"));
+```
+
+#### CSS4 Named Color Set
+
+![Tinter supports CSS4 Named Colors](/docs/img/tinter_css4_named_foreground_16M.png "Foreground colors")
+
+![Tinter supports CSS4 Named Colors](/docs/img/tinter_css4_named_background_16M.png "Foreground colors")
+
+#### ANSI Named Color Set
+
+![Tinter supports ANSI Named Colors](/docs/img/tinter_ansi256_foreground_apple.png "Foreground colors")
+
+![Tinter supports ANSI Named Colors](/docs/img/tinter_ansi256_background_apple.png "Foreground colors")
+
+#### RGB colors (...and using the 16M+ color palette)
+    
+If your console supports TrueColor then Tinter can give you access to it's full 16M+ RGB color palette.
+
+```javascript
+console.log(color.style("I'm using direct RGB values!!!", [255,255,128], [192, 0, 55], "italic"));
+```
 
 ## Install
 
@@ -90,47 +120,28 @@ console.log("->" + myString.red.yellowBg.underline + "<-");
 console.log(myString);
 ``` 
 
-### Named colors
-
-To make Tinter as easy to work with as possible - the MOST - standardised and generally accepted naming was selected.
-
-Thus Tinter specificially supports both the new **lowercased** [CSS4 Named Colors](https://www.w3.org/TR/css-color-4/#named-colors) as well as the standard and older **camel-cased** ANSI color naming schemes. 
-
-```javascript
-console.log(color.rebeccapurple("Hi I'm CSS4's Rebecca Purple!"));
-console.log(color.DeepSkyBlue2("Hi I'm ANSI's DeepSkyBlue... 2!"));
-```
-
-#### CSS4 Named Color Set
-
-![Tinter supports CSS4 Named Colors](/docs/img/tinter_css4_named_foreground_16M.png "Foreground colors")
-
-![Tinter supports CSS4 Named Colors](/docs/img/tinter_css4_named_background_16M.png "Foreground colors")
-
-#### ANSI Named Color Set
-
-![Tinter supports ANSI Named Colors](/docs/img/tinter_ansi256_foreground_apple.png "Foreground colors")
-
-![Tinter supports ANSI Named Colors](/docs/img/tinter_ansi256_background_apple.png "Foreground colors")
-
-#### RGB colors (...and using the 16M+ color palette)
-    
-If your console supports TrueColor then Tinter can give you access to it's full 16M+ RGB color palette.
-
-```javascript
-console.log(color.style("I'm using direct RGB values!!!", [255,255,128], [192, 0, 55], "italic"));
-```
-
 ## Performance
 
 Tinter has been benchmarked on Node versions upwards of v6.10.  Running on a recent Apple laptop - results for simple coloration were:-
 
-    chalk - single foreground color x 1,909,640 ops/sec ±0.78% (89 runs sampled)
-    colors - single foreground color x 3,740,251 ops/sec ±1.33% (85 runs sampled)
-    colors (unsafe) - single foreground color x 5,656,336 ops/sec ±0.89% (88 runs sampled)
-    tinter - single foreground color x 17,613,603 ops/sec ±0.94% (88 runs sampled)
-    Fastest is tinter - single foreground color
+    chalk           - single color x  1,909,640 ops/sec ±0.78% (89 runs sampled)
+    colors          - single color x  3,740,251 ops/sec ±1.33% (85 runs sampled)
+    colors (unsafe) - single color x  5,656,336 ops/sec ±0.89% (88 runs sampled)
+    tinter          - single color x 17,613,603 ops/sec ±0.94% (88 runs sampled)
+    Fastest is tinter - single color
 
 For composition:-
 
     <-- TODO: ADD IMAGE -->
+
+Also, although it offers a slightly shorter syntax - and directly extends string's prototype - the unsafe version of 'colors' doesn't perform much better than the safe version.
+
+Tinter offers an unsafe equivalent too - but only for compatibility reasons.  We don't recommend either!  But suggest only using this - if you wish to upgrade to Tinter but have the burden of large amounts of legacy 'colors' code or something like that.  Anyway, just for completeness, benchmarks for the unsafe versions are:-
+
+    colors (unsafe)    - single color x  5,679,025 ops/sec ±1.35% (87 runs sampled)
+    tinter (unsafe)    - single color x  5,825,590 ops/sec ±0.78% (87 runs sampled)
+
+  
+Finally, to summarize, it seems clear that both in terms of it's range of usable colors and in terms of sheer string-crunching performance - Tinter rocks!
+
+We hope you will like it too!

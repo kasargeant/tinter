@@ -128,6 +128,40 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
         it("should degrade a truecolor to 16-color appropriately.", function() {
             expect(Tinter.style(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[101m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
         });
+
+        it("should correctly support ANSI named colors", function() {
+            expect(Tinter.Black(DUMMY_STRING)).toBe(`\x1b[1m\x1b[30m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should correctly support CSS4 named colors", function() {
+            expect(Tinter.rebeccapurple(DUMMY_STRING)).toBe(`\x1b[1m\x1b[34m${DUMMY_STRING}\x1b[0m`);
+        });
+    });
+
+
+    describe("Color degrading functions", function() {
+
+        it("should degrade a truecolor RGB value to the correct named color - red.", function() {
+            expect(Tinter._nearest16([200, 10, 21])).toBe("red");
+        });
+
+        it("should degrade a truecolor RGB value to the correct named color - green.", function() {
+            expect(Tinter._nearest16([0, 128, 0])).toBe("green");
+        });
+
+        it("should degrade a truecolor RGB value to the correct named color - blue.", function() {
+            expect(Tinter._nearest16([2, 0, 200])).toBe("blue");
+        });
+
+        it("should degrade a truecolor RGB value to the correct named color - random.", function() {
+            expect(Tinter._nearest16([10, 127, 200])).toBe("blue");
+        });
+
+        //
+
+        it("should degrade a set of truecolor RGB values correctly", function() {
+            expect(Tinter._degrade(DUMMY_STRING, [200, 10, 21], [2, 0, 200], "italic")).toBe(`\x1b[3m\x1b[1m\x1b[104m\x1b[1m\x1b[91m${DUMMY_STRING}\x1b[0m`);
+        });
     });
 
 });
