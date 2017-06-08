@@ -123,8 +123,12 @@ describe("Class: Tinter (Node/256-color [using CSS Named colors])", function() {
             expect(Tinter.whiteBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[48;5;231m${DUMMY_STRING}\x1b[0m`);
         });
 
+        it("should be able mark a string with overlapping characteristics", function() {
+            expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[48;5;21m\x1b[1m\x1b[38;5;226m${DUMMY_STRING}\x1b[0m`);
+        });
+
         it("should degrade a truecolor to 256-color appropriately.", function() {
-            expect(Tinter.style(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[48;5;196m\x1b[1m\x1b[38;5;226m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[48;5;196m\x1b[1m\x1b[38;5;226m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should correctly support ANSI named colors", function() {

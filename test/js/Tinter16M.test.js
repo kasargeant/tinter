@@ -122,8 +122,12 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
             expect(Tinter.whiteBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[48;2;255;255;255m${DUMMY_STRING}\x1b[0m`);
         });
 
-        it("should degrade a truecolor to 256-color appropriately.", function() {
-            expect(Tinter.style(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[48;2;192;0;55m\x1b[1m\x1b[38;2;255;255;127m${DUMMY_STRING}\x1b[0m`);
+        it("should be able mark a string with overlapping characteristics", function() {
+            expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[48;2;0;0;255m\x1b[1m\x1b[38;2;255;255;0m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should NOT NEED TO degrade a truecolor - but use RGB values directly.", function() {
+            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[48;2;192;0;55m\x1b[1m\x1b[38;2;255;255;127m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should correctly support ANSI named colors", function() {

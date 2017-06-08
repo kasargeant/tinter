@@ -505,7 +505,7 @@ const Tinter = {
     },
 
     /**
-     * Marks the text string with multiple CSS named color and style characteristics.
+     * Marks the text string with multiple CSS and ANSI named color and style characteristics.
      * @param {string} text - the text string to be colorized and/or styled.
      * @param {string|Array} color - the name of the HTML color.
      * @param {string|Array} colorBg - the name of the HTML background color.
@@ -514,16 +514,30 @@ const Tinter = {
      * @static
      */
     style: function(text, color="default", colorBg="default", style="reset") {
+        return `${this[style]()}${this[colorBg + "Bg"]()}${this[color]()}${text}\x1b[0m`;
+    },
+
+    /**
+     * Marks the text string with multiple RGB colors and ANSI named style characteristics.
+     * @param {string} text - the text string to be colorized and/or styled.
+     * @param {Array} color - an RGB integer array representing the foreground color.
+     * @param {Array} colorBg - an RGB integer array representing the foreground color.
+     * @param {string} style - the name of the ANSI text style.
+     * @returns {string} - the colorized/styled text string.
+     * @static
+     */
+    rgb: function(text, color=[255,255,255], colorBg=[0,0,0], style="reset") {
         // First check for raw RGB truecolor code... if the console scheme
         // supports this then no probs... but if not - we need to degrade appropriately.
-        if(color.constructor === Array) {
+        if(color.constructor === Array && colorBg.constructor === Array) {
             if(config.scheme === "16M") {
                 return this._styleTruecolor(text, color, colorBg, style);
             } else {
                 return this._degrade(text, color, colorBg, style);
             }
         } else {
-            return this[style]() + this[colorBg + "Bg"]() + this[color]() + text + "\x1b[0m";
+            console.error("Error: Unrecognized RGB array values or ANSI style.");
+            return text;
         }
     },
 

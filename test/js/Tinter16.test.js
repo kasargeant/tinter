@@ -126,7 +126,7 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
         });
 
         it("should degrade a truecolor to 16-color appropriately.", function() {
-            expect(Tinter.style(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[101m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[101m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should correctly support ANSI named colors", function() {
