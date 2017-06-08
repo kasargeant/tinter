@@ -12,60 +12,66 @@
 
 // Imports... nothing.
 
-// Defaults
-let config = {
-    scheme: "16",
-    isBrowser: false,
-    debug: false
-};
 const schemes = ["8", "16", "256", "16M"];
 //console.info(process.env);
-if(process.env.TINTER_TEST === undefined) {
 
-    //"darwin", "freebsd", "linux", "sunos", "win32"
+function _setEnv(env) {
+    let defaults = {
+        scheme: "16",
+        isBrowser: false,
+        debug: false
+    };
 
-    // if(process.env.CLICOLOR === "1") {
-    //     // No need to do anything
-    // } else {console.warn("Warning: Environment variable CLICOLOR is missing or set to zero/no color.");}
+    if(env.TINTER_TEST === undefined) {
 
-    switch(process.env.TERM) {
-        case "xterm":
-            config.scheme = "16";
-            break; // In theory, just 8!
-        case "xterm-color":
-            config.scheme = "16";
-            break;
-        case "xterm-16color":
-            config.scheme = "16";
-            break;
-        case "xterm-256color":
-            switch(process.env.TERM_PROGRAM) {
-                case "Apple_Terminal":
-                    config.scheme = "16M";
-                    break;
-                case "iTerm.app":
-                    config.scheme = "16M";
-                    break;
-                default:
-                    if(process.env.FORCE_COLOR === "true") {
-                        config.scheme = "16";
-                    } else {
-                        config.scheme = "256";
-                    }
+        //"darwin", "freebsd", "linux", "sunos", "win32"
+
+        // if(env.CLICOLOR === "1") {
+        //     // No need to do anything
+        // } else {console.warn("Warning: Environment variable CLICOLOR is missing or set to zero/no color.");}
+
+        switch(env.TERM) {
+            case "xterm":
+                defaults.scheme = "16";
+                break; // In theory, just 8!
+            case "xterm-color":
+                defaults.scheme = "16";
+                break;
+            case "xterm-16color":
+                defaults.scheme = "16";
+                break;
+            case "xterm-256color":
+                switch(env.TERM_PROGRAM) {
+                    case "Apple_Terminal":
+                        defaults.scheme = "16M";
+                        break;
+                    case "iTerm.app":
+                        defaults.scheme = "16M";
+                        break;
+                    default:
+                        if(env.FORCE_COLOR === "true") {
+                            defaults.scheme = "16";
+                        } else {
+                            defaults.scheme = "256";
+                        }
                     // Programs like WS have no TERM_PROGRAM VALUE... assume 8/16-color only
-            }
-            break;
-    }
+                }
+                break;
+        }
 
-    // TODO - implement smart color selection if COLORFGBG is set.
-    // if(process.env.COLORFGBG !== undefined) {
-    //     let [fg, bg] = process.env.COLORFGBG.split(";");
-    //     console.log(`setEnv: FG: ${fg}`);
-    //     console.log(`setEnv: BG: ${bg}`);
-    // }
-} else if(schemes.includes(process.env.TINTER_TEST)) {
-    config.scheme = process.env.TINTER_TEST;
+        // TODO - implement smart color selection if COLORFGBG is set.
+        // if(env.COLORFGBG !== undefined) {
+        //     let [fg, bg] = env.COLORFGBG.split(";");
+        //     console.log(`setEnv: FG: ${fg}`);
+        //     console.log(`setEnv: BG: ${bg}`);
+        // }
+    } else if(schemes.includes(env.TINTER_TEST)) {
+        defaults.scheme = env.TINTER_TEST;
+    }
+    return defaults;
 }
+let config = _setEnv(process.env);
+
 
 //console.log(`setEnv: Determined color scheme: ${defaults.scheme}`);
 
@@ -648,8 +654,12 @@ for(let idx = 0; idx < colors.length; idx++) {
     Tinter.default = function(text) {return `\x1b[39m${text}`;};
     Tinter.defaultBg = function(text) {return `\x1b[49m${text}`;};
     Tinter.plain = Tinter.reset;
+    Tinter._setEnv = _setEnv;
 }
 /* jshint ignore:end */
 
 // Exports
 module.exports = Tinter;
+
+
+console.log(JSON.stringify(process.env, null, 2));
