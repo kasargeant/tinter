@@ -6,7 +6,6 @@
  * @license See LICENSE file included in this distribution.
  */
 
-
 "use strict";
 // console.log(JSON.stringify(process.env, null, 2)); // DEBUG ONLY
 
@@ -660,6 +659,3 @@ for(let idx = 0; idx < colors.length; idx++) {
 
 // Exports
 module.exports = Tinter;
-
-
-console.log(JSON.stringify(process.env, null, 2));
