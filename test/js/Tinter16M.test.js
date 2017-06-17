@@ -49,7 +49,7 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
             expect(Tinter.italic(DUMMY_STRING)).toBe(`\x1b[3m${DUMMY_STRING}\x1b[0m`);
         });
 
-        it("should be able mark a string as underscored", function() {
+        it("should be able mark a string as underlined", function() {
             expect(Tinter.underline(DUMMY_STRING)).toBe(`\x1b[4m${DUMMY_STRING}\x1b[0m`);
         });
 
@@ -98,7 +98,6 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
         });
 
         it("should be able mark a string as white", function() {
-            // console.log("IDX: " + Tinter.webColors.indexOf("white"));
             expect(Tinter.white(DUMMY_STRING)).toBe(`\x1b[1m\x1b[38;2;255;255;255m${DUMMY_STRING}\x1b[0m`);
         });
 
@@ -138,7 +137,6 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
         });
 
         it("should be able mark a string with a white background", function() {
-            // console.log("IDX: " + Tinter.webColors.indexOf("whiteBg"));
             expect(Tinter.whiteBg(DUMMY_STRING)).toBe(`\x1b[1m\x1b[48;2;255;255;255m${DUMMY_STRING}\x1b[0m`);
         });
 
@@ -148,15 +146,7 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
 
     });
 
-    describe("Colorization functions (composite)", function() {
-
-        it("should be able mark a string with overlapping characteristics", function() {
-            expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[48;2;0;0;255m\x1b[1m\x1b[38;2;255;255;0m${DUMMY_STRING}\x1b[0m`);
-        });
-
-        it("should NOT NEED TO degrade a truecolor - but use RGB values directly.", function() {
-            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[48;2;192;0;55m\x1b[1m\x1b[38;2;255;255;127m${DUMMY_STRING}\x1b[0m`);
-        });
+    describe("Colorization functions (naming)", function() {
 
         it("should correctly support ANSI named colors", function() {
             expect(Tinter.Black(DUMMY_STRING)).toBe(`\x1b[1m\x1b[38;2;0;0;0m${DUMMY_STRING}\x1b[0m`);
@@ -167,6 +157,38 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
         });
     });
 
+    describe("Colorization functions (composition by stacking)", function() {
+
+        it("should be able mark a string with 2 stacked characteristics", function() {
+            expect(Tinter.red.blueBg(DUMMY_STRING)).toBe(`\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should be able mark a string with ALL stacked characteristics", function() {
+            expect(Tinter.red.blueBg.inverse(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
+        });
+    });
+
+    describe("Colorization functions (composition by streaming)", function() {
+
+        it("should be able mark a string with 2 stacked characteristics", function() {
+            expect(Tinter.red.blueBg()).toBe(`\x1b[91m\x1b[104m`);
+        });
+
+        it("should be able mark a string with ALL stacked characteristics", function() {
+            expect(Tinter.red.blueBg.inverse()).toBe(`\x1b[7m\x1b[91m\x1b[104m`);
+        });
+    });
+
+    describe("Colorization functions (composition by direct calls)", function() {
+
+        it("should be able mark a string with overlapping characteristics", function() {
+            expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[48;2;0;0;255m\x1b[1m\x1b[38;2;255;255;0m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should NOT NEED TO degrade a truecolor - but use RGB values directly.", function() {
+            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[48;2;192;0;55m\x1b[1m\x1b[38;2;255;255;127m${DUMMY_STRING}\x1b[0m`);
+        });
+    });
 
     describe("Color degrading functions", function() {
 

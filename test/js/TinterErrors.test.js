@@ -21,8 +21,21 @@ describe("Class: Tinter (Node/unknown environ)", function() {
         it("contains spec with an positive expectation", function() {
             expect(true).toBe(true);
         });
+
         it("contains spec with a negative expectation", function() {
             expect(!true).toBe(false);
+        });
+    });
+
+    describe("_nearest16() errors", function() {
+
+        // Bad types
+        it("should throw an error with a style of the wrong type", function() {
+            // expect(function() {Tinter._styleTruecolor("anything", [255,255,127], [192, 0, 55], "REALLYWRONG")}).toThrowError(new Error(`Unrecognised text style: 'REALLYWRONG'.`));
+            expect(function() {
+                // Tinter._nearest16([255, 255, 127]);
+                Tinter._nearest16(255, 255, 127);
+            }).toThrow();
         });
     });
 

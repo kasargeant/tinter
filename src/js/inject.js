@@ -468,7 +468,8 @@ const colors = [
     ["whitesmoke",[245,245,245],255,97]
 ];
 
-const styles = ["reset", "bright", "dim", "italic", "underline", "blink", "plain", "inverse", "hidden"];
+const styles = ["reset", "bright", "dim", "italic", "underline", "blink", "blink2", "inverse", "hidden"];
+const coreColors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "default"];
 
 /**
  * @module Tinter
@@ -481,25 +482,23 @@ const Tinter = {
         if(style !== undefined) {
             let i = styles.indexOf(style);
             if(i === -1) {
-                console.error(`Error: Unrecognised text style: '${style}'.`);
-                return text;
+                throw new Error(`Unrecognised text style: '${style}'.`);
             }
             result += `\x1b[${i}m`;
         }
-        if(colorBg !== undefined && colorBg.constructor === Array) {
-            if(colorBg.length !== 3) {
-                console.error(`Error: Unrecognised background color: '${colorBg}'.`);
-                return text;
+        if(colorBg !== undefined) {
+            if(colorBg.constructor === Array && colorBg.length === 3) {
+                result += `\x1b[1m\x1b[48;2;${colorBg[0]};${colorBg[1]};${colorBg[2]}m`;
+            } else {
+                throw new Error(`Error: RGB background color value is malformed or not an array: '${colorBg}'.`);
             }
-            result += `\x1b[48;2;${colorBg[0]};${colorBg[1]};${colorBg[2]}m`;
-
         }
-        if(color !== undefined && color.constructor === Array) {
-            if(color.length !== 3) {
-                console.error(`Error: Unrecognised text color: '${color}'.`);
-                return text;
+        if(color !== undefined) {
+            if(color.constructor === Array && color.length === 3) {
+                result += `\x1b[1m\x1b[38;2;${color[0]};${color[1]};${color[2]}m`;
+            } else {
+                throw new Error(`Error: RGB text color value is malformed or not an array: '${color}'.`);
             }
-            result += `\x1b[38;2;${color[0]};${color[1]};${color[2]}m`;
         }
         return result += `${text}\x1b[0m`;
     },
@@ -513,36 +512,45 @@ const Tinter = {
      * @returns {string} - the colorized/styled text string.
      * @static
      */
-    style: function(text, color, colorBg, style) {
+    style: function(text, color="default", colorBg="default", style="reset") {
+        return `${this[style]()}${this[colorBg + "Bg"]()}${this[color]()}${text}\x1b[0m`;
+    },
 
+    /**
+     * Marks the text string with multiple RGB colors and ANSI named style characteristics.
+     * @param {string} text - the text string to be colorized and/or styled.
+     * @param {Array} color - an RGB integer array representing the foreground color.
+     * @param {Array} colorBg - an RGB integer array representing the foreground color.
+     * @param {string} style - the name of the ANSI text style.
+     * @returns {string} - the colorized/styled text string.
+     * @static
+     */
+    rgb: function(text, color=[255,255,255], colorBg=[0,0,0], style="reset") {
         // First check for raw RGB truecolor code... if the console scheme
         // supports this then no probs... but if not - we need to degrade appropriately.
-        if(color.constructor === Array) {
+        if(color.constructor === Array && colorBg.constructor === Array) {
             if(config.scheme === "16M") {
                 return this._styleTruecolor(text, color, colorBg, style);
             } else {
                 return this._degrade(text, color, colorBg, style);
             }
         } else {
-            return this[style]() + this[colorBg+"Bg"]() + this[color]() + text + "\x1b[0m";
+            throw new Error("Unrecognized or malformed RGB array values.");
         }
     },
 
     _nearest16: function(rgb) {
+        if(rgb.constructor !== Array || rgb.length !== 3) {
+            throw new Error("Malformed array value.");
+        }
         let hasRed = false;
         let hasGreen = false;
         let hasBlue = false;
         let [r, g, b] = rgb;
         let nearest = null;
-        if(r >= 128) {
-            hasRed = true;
-        }
-        if(g >= 128) {
-            hasGreen = true;
-        }
-        if(b >= 128) {
-            hasBlue = true;
-        }
+        if(r >= 128) {hasRed = true;}
+        if(g >= 128) {hasGreen = true;}
+        if(b >= 128) {hasBlue = true;}
         if(hasRed && hasGreen && hasBlue) {
             nearest = "white";
         } else if(hasRed && hasGreen && !hasBlue) {
@@ -560,7 +568,6 @@ const Tinter = {
         } else if(!hasRed && !hasGreen && !hasBlue) {
             nearest = "black";
         }
-
         return nearest;
     },
 
@@ -570,71 +577,9 @@ const Tinter = {
         let dColorBg = this._nearest16(colorBg);
 
         return this.style(text, dColor, dColorBg, style);
-    },
-
-
-    /**
-     * Demonstrates named web color and style console support (256 colors).
-     * @returns {void}
-     */
-    // demoWebColor: function() {
-    //     for(let style of styles) {
-    //         for(let b = 0; b < webColors.length; b++) {
-    //             let bg = webColors[b];
-    //             for(let f = 0; f < webColors.length; f++) {
-    //                 let fg = webColors[f];
-    //                 let text = `${bg}/${fg}`;
-    //                 let test = this.style(text, fg, bg, style);
-    //                 console.log(test);
-    //             }
-    //         }
-    //     }
-    // },
-    demoWebColor: function() {
-        let bg = "black";
-        for(let f = 0; f < webColors.length; f++) {
-            let fg = webColors[f];
-            let text = `${bg}/${fg}`;
-            let test = this.style(text, fg, bg, "plain");
-            console.log(test);
-        }
-
-    },
-
-    /**
-     * Demonstrates TrueColor console support.
-     * @returns {void}
-     */
-    demoTrueColor: function() {
-        let text = `!"#$%&()*+'-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_abcdefghijklmnopqrstuvwxyz{|}~`;
-        const inc = 4;
-        for(let style of styles) {
-            for(let bgR = 0; bgR < 255; bgR += inc) {
-                for(let bgG = 0; bgG < 255; bgG += inc) {
-                    for(let bgB = 0; bgB < 255; bgB += inc) {
-                        for(let fgR = 0; fgR < 255; fgR += inc) {
-                            for(let fgG = 0; fgG < 255; fgG += inc) {
-                                for(let fgB = 0; fgB < 255; fgB += inc) {
-                                    let test = this._styleTruecolor(text, [fgR, fgG, fgB], [bgR, bgG, bgB], style);
-                                    console.log(test);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    },
-    reset: function() {
-        return `\x1b[0m`;
     }
 };
 ////console.log("USING SCHEME: " + config.scheme); // DEBUG ONLY
-
-// String.prototype.trim = function () {
-//     return this.replace(/^\s+|\s+$/g, "");
-// };
-
 
 /* jshint ignore:start */
 for(let idx = 0; idx < styles.length; idx++) {
@@ -670,10 +615,15 @@ for(let idx = 0; idx < colors.length; idx++) {
         Object.defineProperty(String.prototype, key + "Bg", {configurable: true, get: function() {
             return `\x1b[1m\x1b[48;2;${r};${g};${b}m${this}\x1b[0m`;
         }});
-    } else {
-        console.error(`Error: Unknown color scheme '${config.scheme}'.`);
     }
 }
+Object.defineProperty(String.prototype, "default", {configurable: true, get: function() {
+    return `\x1b[39m${this}`;
+}});
+Object.defineProperty(String.prototype, "defaultBg", {configurable: true, get: function() {
+    return `\x1b[49m${this}`;
+}});
+Object.defineProperty(String.prototype, "plain", {configurable: true, get: this.reset});
 /* jshint ignore:end */
 
 // Exports
