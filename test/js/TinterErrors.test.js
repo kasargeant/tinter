@@ -21,6 +21,7 @@ describe("Class: Tinter (Node/unknown environ)", function() {
         it("contains spec with an positive expectation", function() {
             expect(true).toBe(true);
         });
+
         it("contains spec with a negative expectation", function() {
             expect(!true).toBe(false);
         });

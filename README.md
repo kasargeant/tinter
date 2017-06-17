@@ -69,7 +69,7 @@ console.log(color.redBg("I've a red background!"));
 console.log(color.underline("This text uses underline."));
 ```
 
-#### Composing styles
+#### Composing styles/colors
 
 Tinter allows you to compose multi-colored text in a number of ways:-
 
@@ -90,11 +90,24 @@ let streamed = `I'm ${color.green()}first green then ${color.underline()}with un
 console.log(streamed);
 ```
 
-#### Overlaying styles:-
+#### Overlaying styles/colors:-
 
 ```javascript
 console.log(color.style("I'm multi-styled!", "cornflowerblue", "orange", "italic"));
 ```
+
+#### Chaining styles/colors
+
+Limited to the core eight console colors (black, red, yellow, blue, green, magenta, cyan and white)
+you can also chain styling with the order: style.color.colorBg
+
+```javascript
+console.log(color.plain.yellow.blueBg("I'm using chained styling"));
+console.log(color.italic.yellow("I'm using chained styling"));
+console.log(color.inverse.red("I'm using chained styling"));
+```
+
+NOTE: When chaining styles/colors, order is important is important and a style, even if plain is 
 
 #### Injecting Tinter directly into String.
 

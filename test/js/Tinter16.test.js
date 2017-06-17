@@ -49,7 +49,7 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
             expect(Tinter.italic(DUMMY_STRING)).toBe(`\x1b[3m${DUMMY_STRING}\x1b[0m`);
         });
 
-        it("should be able mark a string as underscored", function() {
+        it("should be able mark a string as underlined", function() {
             expect(Tinter.underline(DUMMY_STRING)).toBe(`\x1b[4m${DUMMY_STRING}\x1b[0m`);
         });
 
@@ -150,6 +150,11 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
 
         it("should be able mark a string with overlapping characteristics", function() {
             expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[104m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        // NOTE: 8-col restriction for chaining.
+        it("should be able mark a string with chained characteristics", function() {
+            expect(Tinter.inverse.red.blueBg(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should degrade a truecolor to 16-color appropriately.", function() {

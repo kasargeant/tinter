@@ -474,6 +474,7 @@ const colors = [
 ];
 
 const styles = ["reset", "bright", "dim", "italic", "underline", "blink", "blink2", "inverse", "hidden"];
+const coreColors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"];
 
 /**
  * @module Tinter
@@ -552,15 +553,9 @@ const Tinter = {
         let hasBlue = false;
         let [r, g, b] = rgb;
         let nearest = null;
-        if(r >= 128) {
-            hasRed = true;
-        }
-        if(g >= 128) {
-            hasGreen = true;
-        }
-        if(b >= 128) {
-            hasBlue = true;
-        }
+        if(r >= 128) {hasRed = true;}
+        if(g >= 128) {hasGreen = true;}
+        if(b >= 128) {hasBlue = true;}
         if(hasRed && hasGreen && hasBlue) {
             nearest = "white";
         } else if(hasRed && hasGreen && !hasBlue) {
@@ -578,7 +573,6 @@ const Tinter = {
         } else if(!hasRed && !hasGreen && !hasBlue) {
             nearest = "black";
         }
-
         return nearest;
     },
 
@@ -647,15 +641,30 @@ for(let idx = 0; idx < colors.length; idx++) {
             }
             return `\x1b[1m\x1b[48;2;${r};${g};${b}m${text}\x1b[0m`;
         };
-    } else {
-        throw new Error(`Unknown color scheme '${config.scheme}'.`);
     }
     Tinter.default = function(text) {return `\x1b[39m${text}`;};
     Tinter.defaultBg = function(text) {return `\x1b[49m${text}`;};
     Tinter.plain = Tinter.reset;
     Tinter._setEnv = _setEnv;
+
+    // Adds a conservative 8 col, 8 style 'chained' syntax.  No more though... otherwise both mem and perf impaired.
+    for(let s = 0; s < styles.length - 1; s++) {
+        let style = styles[s];
+        if(s === 0) {style = "plain";}
+        for(let fg = 0; fg < coreColors.length; fg++) {
+            let color = coreColors[fg];
+            for(let bg = 1; bg < coreColors.length; bg++) {
+                let colorBg = coreColors[bg] + "Bg";
+                if(Tinter[style][color] === undefined) {
+                    Tinter[style][color] = function(text) {return `\x1b[${s}m\x1b[${90 + fg}m${text}\x1b[0m`;};
+                }
+                Tinter[style][color][colorBg] = function(text) {return `\x1b[${s}m\x1b[${90 + fg}m\x1b[${100 + bg}m${text}\x1b[0m`;};
+            }
+        }
+    }
+    /* jshint ignore:end */
 }
-/* jshint ignore:end */
+
 
 // Exports
 module.exports = Tinter;

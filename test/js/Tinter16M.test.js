@@ -49,7 +49,7 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
             expect(Tinter.italic(DUMMY_STRING)).toBe(`\x1b[3m${DUMMY_STRING}\x1b[0m`);
         });
 
-        it("should be able mark a string as underscored", function() {
+        it("should be able mark a string as underlined", function() {
             expect(Tinter.underline(DUMMY_STRING)).toBe(`\x1b[4m${DUMMY_STRING}\x1b[0m`);
         });
 
@@ -152,6 +152,11 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
 
         it("should be able mark a string with overlapping characteristics", function() {
             expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[48;2;0;0;255m\x1b[1m\x1b[38;2;255;255;0m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        // NOTE: 8-col restriction for chaining.
+        it("should be able mark a string with chained characteristics", function() {
+            expect(Tinter.inverse.red.blueBg(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should NOT NEED TO degrade a truecolor - but use RGB values directly.", function() {
