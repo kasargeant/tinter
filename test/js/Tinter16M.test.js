@@ -156,7 +156,7 @@ describe("Class: Tinter (Node/16M+ truecolor [using CSS Named colors])", functio
 
         // NOTE: 8-col restriction for chaining.
         it("should be able mark a string with chained characteristics", function() {
-            expect(Tinter.inverse.red.blueBg(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.red.blueBg.inverse(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should NOT NEED TO degrade a truecolor - but use RGB values directly.", function() {

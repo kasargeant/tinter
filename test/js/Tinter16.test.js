@@ -154,7 +154,7 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
 
         // NOTE: 8-col restriction for chaining.
         it("should be able mark a string with chained characteristics", function() {
-            expect(Tinter.inverse.red.blueBg(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
+            expect(Tinter.red.blueBg.inverse(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
         });
 
         it("should degrade a truecolor to 16-color appropriately.", function() {

@@ -96,15 +96,19 @@ console.log(streamed);
 console.log(color.style("I'm multi-styled!", "cornflowerblue", "orange", "italic"));
 ```
 
-#### Chaining styles/colors
+#### Stacking styles/colors
 
 Limited to the core eight console colors (black, red, yellow, blue, green, magenta, cyan and white)
-you can also chain styling with the order: style.color.colorBg
+you can also stack colors and style with syntax: color.colorBg.style
 
 ```javascript
-console.log(color.plain.yellow.blueBg("I'm using chained styling"));
-console.log(color.italic.yellow("I'm using chained styling"));
-console.log(color.inverse.red("I'm using chained styling"));
+console.log(color.yellow("Yellow text."));
+console.log(color.yellow.blackBg("Yellow text on a black background."));
+console.log(color.default.greenBg("Default text on a green background."));
+console.log(color.red.defaultBg.bright("Red text, default background using 'bright' mode."));
+console.log(color.yellow.blueBg.underline("Yellow text on a blue background and underlined."));
+console.log(color.blue.whiteBg("Blue text on a white background."));
+console.log(color.blue.whiteBg.inverse("Blue text on a white background - but with inverted colors."));
 ```
 
 NOTE: When chaining styles/colors, order is important is important and a style, even if plain is 

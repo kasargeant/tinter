@@ -474,7 +474,7 @@ const colors = [
 ];
 
 const styles = ["reset", "bright", "dim", "italic", "underline", "blink", "blink2", "inverse", "hidden"];
-const coreColors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white"];
+const coreColors = ["black", "red", "green", "yellow", "blue", "magenta", "cyan", "white", "default"];
 
 /**
  * @module Tinter
@@ -602,6 +602,7 @@ for(let idx = 0; idx < colors.length; idx++) {
     let [r,g,b] = color[1];
     if(config.scheme === "16") {
         let degrade = color[3];
+        let stem;
         Tinter[key] = function(text) {
             if(text === undefined) {
                 return `\x1b[1m\x1b[${degrade}m`;
@@ -642,29 +643,43 @@ for(let idx = 0; idx < colors.length; idx++) {
             return `\x1b[1m\x1b[48;2;${r};${g};${b}m${text}\x1b[0m`;
         };
     }
-    Tinter.default = function(text) {return `\x1b[39m${text}`;};
-    Tinter.defaultBg = function(text) {return `\x1b[49m${text}`;};
-    Tinter.plain = Tinter.reset;
-    Tinter._setEnv = _setEnv;
+}
+Tinter.default = function(text) {return `\x1b[39m${text}`;};
+Tinter.defaultBg = function(text) {return `\x1b[49m${text}`;};
+Tinter.plain = Tinter.reset;
+Tinter._setEnv = _setEnv;
 
-    // Adds a conservative 8 col, 8 style 'chained' syntax.  No more though... otherwise both mem and perf impaired.
-    for(let s = 0; s < styles.length - 1; s++) {
-        let style = styles[s];
-        if(s === 0) {style = "plain";}
-        for(let fg = 0; fg < coreColors.length; fg++) {
-            let color = coreColors[fg];
-            for(let bg = 1; bg < coreColors.length; bg++) {
-                let colorBg = coreColors[bg] + "Bg";
-                if(Tinter[style][color] === undefined) {
-                    Tinter[style][color] = function(text) {return `\x1b[${s}m\x1b[${90 + fg}m${text}\x1b[0m`;};
-                }
-                Tinter[style][color][colorBg] = function(text) {return `\x1b[${s}m\x1b[${90 + fg}m\x1b[${100 + bg}m${text}\x1b[0m`;};
+// Adds a conservative 8 col, 8 style 'chained' syntax.  No more though... otherwise both mem and perf impaired.
+for(let s = 0; s < styles.length - 1; s++) {
+    let style = styles[s];
+    if(s === 0) {style = "plain";}
+    for(let fgIdx = 0; fgIdx < coreColors.length; fgIdx++) {
+        let color = coreColors[fgIdx];
+        let fg = (color === "default") ? 39 : 90 + fgIdx;
+        for(let bgIdx = 0; bgIdx < coreColors.length; bgIdx++) {
+            let colorBg = coreColors[bgIdx] + "Bg";
+            let bg = (colorBg === "defaultBg") ? 49 : 100 + bgIdx;
+            if(Tinter[color][colorBg] === undefined) {
+                //console.log(`-> Tinter[${color}][${colorBg}]`);
+                Tinter[color][colorBg] = function(text) {
+                    if(text === undefined) {
+                        return `\x1b[${fg}m\x1b[${bg}m`;
+                    }
+                    return `\x1b[${fg}m\x1b[${bg}m${text}\x1b[0m`;
+                };
             }
+            //console.log(`-> Tinter[${color}][${colorBg}][${style}]`);
+            Tinter[color][colorBg][style] = function(text) {
+                if(text === undefined) {
+                    return `\x1b[${s}m\x1b[${fg}m\x1b[${bg}m`;
+                }
+                return `\x1b[${s}m\x1b[${fg}m\x1b[${bg}m${text}\x1b[0m`;
+            };
         }
     }
-    /* jshint ignore:end */
 }
 
+/* jshint ignore:end */
 
 // Exports
 module.exports = Tinter;
