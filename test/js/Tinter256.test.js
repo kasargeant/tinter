@@ -1,5 +1,5 @@
 /**
- * @file Tinter16.test.js
+ * @file Tinter256.test.js
  * @description Unit tests for the Tinter Class (Node/256-color [using CSS Named colors]).
  * @author Kyle Alexis Sargeant <kasargeant@gmail.com> {@link https://github.com/kasargeant https://github.com/kasargeant}.
  * @copyright Kyle Alexis Sargeant 2017
