@@ -649,37 +649,40 @@ Tinter.defaultBg = function(text) {return `\x1b[49m${text}`;};
 Tinter.plain = Tinter.reset;
 Tinter._setEnv = _setEnv;
 
-// Adds a conservative 8 col, 8 style 'chained' syntax.  No more though... otherwise both mem and perf impaired.
-for(let s = 0; s < styles.length - 1; s++) {
-    let style = styles[s];
-    if(s === 0) {style = "plain";}
-    for(let fgIdx = 0; fgIdx < coreColors.length; fgIdx++) {
-        let color = coreColors[fgIdx];
-        let fg = (color === "default") ? 39 : 90 + fgIdx;
-        for(let bgIdx = 0; bgIdx < coreColors.length; bgIdx++) {
-            let colorBg = coreColors[bgIdx] + "Bg";
-            let bg = (colorBg === "defaultBg") ? 49 : 100 + bgIdx;
-            if(Tinter[color][colorBg] === undefined) {
-                //console.log(`-> Tinter[${color}][${colorBg}]`);
-                Tinter[color][colorBg] = function(text) {
+function _setupTinterStacks() {
+    // Adds a conservative 8 col, 8 style 'chained' syntax.  No more though... otherwise both mem and perf impaired.
+    for(let s = 0; s < styles.length - 1; s++) {
+        let style = styles[s];
+        if(s === 0) {style = "plain";}
+        for(let fgIdx = 0; fgIdx < coreColors.length; fgIdx++) {
+            let color = coreColors[fgIdx];
+            let fg = (color === "default") ? 39 : 90 + fgIdx;
+            for(let bgIdx = 0; bgIdx < coreColors.length; bgIdx++) {
+                let colorBg = coreColors[bgIdx] + "Bg";
+                let bg = (colorBg === "defaultBg") ? 49 : 100 + bgIdx;
+                if(Tinter[color][colorBg] === undefined) {
+                    //console.log(`-> Tinter[${color}][${colorBg}]`);
+                    Tinter[color][colorBg] = function(text) {
+                        if(text === undefined) {
+                            return `\x1b[${fg}m\x1b[${bg}m`;
+                        }
+                        return `\x1b[${fg}m\x1b[${bg}m${text}\x1b[0m`;
+                    };
+                }
+                //console.log(`-> Tinter[${color}][${colorBg}][${style}]`);
+                Tinter[color][colorBg][style] = function(text) {
                     if(text === undefined) {
-                        return `\x1b[${fg}m\x1b[${bg}m`;
+                        return `\x1b[${s}m\x1b[${fg}m\x1b[${bg}m`;
                     }
-                    return `\x1b[${fg}m\x1b[${bg}m${text}\x1b[0m`;
+                    return `\x1b[${s}m\x1b[${fg}m\x1b[${bg}m${text}\x1b[0m`;
                 };
             }
-            //console.log(`-> Tinter[${color}][${colorBg}][${style}]`);
-            Tinter[color][colorBg][style] = function(text) {
-                if(text === undefined) {
-                    return `\x1b[${s}m\x1b[${fg}m\x1b[${bg}m`;
-                }
-                return `\x1b[${s}m\x1b[${fg}m\x1b[${bg}m${text}\x1b[0m`;
-            };
         }
     }
 }
-
+_setupTinterStacks();
 /* jshint ignore:end */
 
 // Exports
 module.exports = Tinter;
+

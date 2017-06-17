@@ -150,8 +150,8 @@ Tinter has been benchmarked on Node versions upwards of v6.10.  Running on a rec
 
 For stacked composition (e.g. tinter.red.blueBg.underline("hi there!"); ):-
 
-    chalk           - stacked color/styles x 470,192 ops/sec ±1.00% (89 runs sampled)
-    colors          - stacked color/styles x 733,671 ops/sec ±1.04% (89 runs sampled)
+    chalk           - stacked color/styles x   470,192 ops/sec ±1.00% (89 runs sampled)
+    colors          - stacked color/styles x   733,671 ops/sec ±1.04% (89 runs sampled)
     tinter          - stacked color/styles x 8,176,748 ops/sec ±1.20% (83 runs sampled)
     
     Fastest is: 'tinter - stacked color/styles'.

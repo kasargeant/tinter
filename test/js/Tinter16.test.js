@@ -146,20 +146,7 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
 
     });
 
-    describe("Colorization functions (composite)", function() {
-
-        it("should be able mark a string with overlapping characteristics", function() {
-            expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[104m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
-        });
-
-        // NOTE: 8-col restriction for chaining.
-        it("should be able mark a string with chained characteristics", function() {
-            expect(Tinter.red.blueBg.inverse(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
-        });
-
-        it("should degrade a truecolor to 16-color appropriately.", function() {
-            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[101m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
-        });
+    describe("Colorization functions (naming)", function() {
 
         it("should correctly support ANSI named colors", function() {
             expect(Tinter.Black(DUMMY_STRING)).toBe(`\x1b[1m\x1b[30m${DUMMY_STRING}\x1b[0m`);
@@ -170,6 +157,38 @@ describe("Class: Tinter (Node/16-color ANSI mode)", function() {
         });
     });
 
+    describe("Colorization functions (composition by stacking)", function() {
+
+        it("should be able mark a string with 2 stacked characteristics", function() {
+            expect(Tinter.red.blueBg(DUMMY_STRING)).toBe(`\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should be able mark a string with ALL stacked characteristics", function() {
+            expect(Tinter.red.blueBg.inverse(DUMMY_STRING)).toBe(`\x1b[7m\x1b[91m\x1b[104m${DUMMY_STRING}\x1b[0m`);
+        });
+    });
+
+    describe("Colorization functions (composition by streaming)", function() {
+
+        it("should be able mark a string with 2 stacked characteristics", function() {
+            expect(Tinter.red.blueBg()).toBe(`\x1b[91m\x1b[104m`);
+        });
+
+        it("should be able mark a string with ALL stacked characteristics", function() {
+            expect(Tinter.red.blueBg.inverse()).toBe(`\x1b[7m\x1b[91m\x1b[104m`);
+        });
+    });
+
+    describe("Colorization functions (composition by direct calls)", function() {
+
+        it("should be able mark a string with overlapping characteristics", function() {
+            expect(Tinter.style(DUMMY_STRING, "yellow", "blue", "italic")).toBe(`\x1b[3m\x1b[1m\x1b[104m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
+        });
+
+        it("should degrade a truecolor to 16-color appropriately.", function() {
+            expect(Tinter.rgb(DUMMY_STRING, [255,255,127], [192, 0, 55], "underline")).toBe(`\x1b[4m\x1b[1m\x1b[101m\x1b[1m\x1b[93m${DUMMY_STRING}\x1b[0m`);
+        });
+    });
 
     describe("Color degrading functions", function() {
 
