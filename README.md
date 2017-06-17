@@ -158,3 +158,6 @@ We hope you will like it too!
 
 ## License
 
+Tinter was written by Kyle Alexis Sargeant and is shared under the LGPL-3.0 license.  
+
+So basically you can use it freely in anything - both open-source or commercial - without any need to disclose your own code.
