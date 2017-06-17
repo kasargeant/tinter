@@ -99,7 +99,7 @@ console.log(color.style("I'm multi-styled!", "cornflowerblue", "orange", "italic
 #### Stacking styles/colors
 
 Limited to the core eight console colors (black, red, yellow, blue, green, magenta, cyan and white)
-you can also stack colors and style with syntax: color.colorBg.style
+\- but often much more convenient to use \- you can also stack colors and style with syntax: *color.colorBg.style*
 
 ```javascript
 console.log(color.yellow("Yellow text."));
@@ -111,9 +111,7 @@ console.log(color.blue.whiteBg("Blue text on a white background."));
 console.log(color.blue.whiteBg.inverse("Blue text on a white background - but with inverted colors."));
 ```
 
-NOTE: When chaining styles/colors, order is important is important and a style, even if plain is 
-
-#### Injecting Tinter directly into String.
+#### Injecting Tinter directly into JS's String.
 
 A lot of developers like the colors.js approach of directly extending the built-in string - to facilitate simpler, shorter coding.
 
@@ -147,11 +145,16 @@ Tinter has been benchmarked on Node versions upwards of v6.10.  Running on a rec
     colors          - single color x  3,740,251 ops/sec ±1.33% (85 runs sampled)
     colors (unsafe) - single color x  5,656,336 ops/sec ±0.89% (88 runs sampled)
     tinter          - single color x 17,613,603 ops/sec ±0.94% (88 runs sampled)
-    Fastest is tinter - single color
+    
+    Fastest is: 'tinter - single color'.
 
-For composition:-
+For stacked composition (e.g. tinter.red.blueBg.underline("hi there!"); ):-
 
-    <-- TODO: ADD IMAGE -->
+    chalk           - stacked color/styles x 470,192 ops/sec ±1.00% (89 runs sampled)
+    colors          - stacked color/styles x 733,671 ops/sec ±1.04% (89 runs sampled)
+    tinter          - stacked color/styles x 8,176,748 ops/sec ±1.20% (83 runs sampled)
+    
+    Fastest is: 'tinter - stacked color/styles'.
 
 ### Unsafe (build-in extending versions)
 
@@ -167,7 +170,6 @@ Anyway, just for completeness and to demonstrate the poor performance of this ap
 
     colors (unsafe)    - single color x  5,679,025 ops/sec ±1.35% (87 runs sampled)
     tinter (unsafe)    - single color x  5,825,590 ops/sec ±0.78% (87 runs sampled)
-
   
 Finally, to summarize, it seems clear that both in terms of its range of usable colors and in terms of sheer string-crunching performance - Tinter rocks!
 
