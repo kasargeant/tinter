@@ -1,9 +1,16 @@
 {
   "name": "tinter",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "A lean and fast console string colorizing module - supports CSS naming and up to 16M+ colors.",
   "keywords": [
-    "javascript", "color", "colour", "truecolor", "console", "terminal", "ANSI", "CSS"
+    "javascript",
+    "color",
+    "colour",
+    "truecolor",
+    "console",
+    "terminal",
+    "ANSI",
+    "CSS"
   ],
   "author": "Kyle Alexis Sargeant",
   "email": "kasargeant@gmail.com",
