@@ -1,4 +1,4 @@
-# Tinter [![npm](https://img.shields.io/npm/v/tinter.svg)]() [![Build Status](https://travis-ci.org/kasargeant/tinter.svg?branch=master)](https://travis-ci.org/kasargeant/tinter)  [![Coverage Status](https://coveralls.io/repos/github/kasargeant/tinter/badge.svg?branch=master)](https://coveralls.io/github/kasargeant/tinter?branch=master)
+# Tinter [![npm](https://img.shields.io/npm/v/tinter.svg)]() [![Build Status](https://travis-ci.org/kasargeant/tinter.svg?branch=master)](https://travis-ci.org/kasargeant/tinter) [![Build Status Windows](https://ci.appveyor.com/api/projects/status/github/kasargeant/tinter?branch=master&svg=true)](https://ci.appveyor.com/project/kasargeant/tinter) [![Coverage Status](https://coveralls.io/repos/github/kasargeant/tinter/badge.svg?branch=master)](https://coveralls.io/github/kasargeant/tinter?branch=master)
 
 ![Tinter woodblock](/docs/img/woodblock_sharkhats.jpg "Attribution: https://www.flickr.com/photos/sharkhats/")
 
